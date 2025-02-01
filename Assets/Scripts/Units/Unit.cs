@@ -9,9 +9,15 @@ public class Unit : NetworkBehaviour
     [SerializeField] private UnityEvent onSelected = null;
     [SerializeField] private UnityEvent onDeselected = null;
 
+    [Header("Scripts")]
+    [SerializeField] private UnitMovement unitMovement = null;
+
+    public UnitMovement GetUnitMovement()
+    {
+        return unitMovement;
+    }
+
     #region Server
-
-
 
     #endregion
 
@@ -28,7 +34,7 @@ public class Unit : NetworkBehaviour
     [Client]
     public void Deselect()
     {
-        //if (!hasAuthority) {  return; }
+        //if (!hasAuthority) { return; }
 
         onDeselected?.Invoke();
     }

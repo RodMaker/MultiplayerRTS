@@ -8,9 +8,7 @@ using UnityEngine.InputSystem;
 public class UnitMovement : NetworkBehaviour
 {
     [SerializeField] private Animator unitAnimator = null;
-    [SerializeField] private NavMeshAgent agent = null;
-
-    private Camera mainCamera;
+    public NavMeshAgent agent = null;
 
     [SyncVar]
     bool _isRunning;
@@ -18,7 +16,7 @@ public class UnitMovement : NetworkBehaviour
     #region Server
 
     [Command]
-    private void CmdMove(Vector3 position)
+    public void CmdMove(Vector3 position)
     {
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) { return; }
 
@@ -35,29 +33,12 @@ public class UnitMovement : NetworkBehaviour
 
     #region Client
 
-    public override void OnStartAuthority()
-    {
-        mainCamera = Camera.main;
-    }
-
     [ClientCallback]
     private void Update()
     {
         CmdSetRun(agent.velocity.magnitude > 0f);
 
         unitAnimator.SetBool("isRunning", _isRunning);
-
-        //if (!hasAuthority) { return; }
-
-        if (!Mouse.current.rightButton.wasPressedThisFrame) { return; }
-
-        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity)) { return; }
-
-        CmdMove(hit.point);
-
-        agent.SetDestination(hit.point);
 
     }
 

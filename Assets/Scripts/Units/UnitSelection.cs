@@ -9,7 +9,7 @@ public class UnitSelection : MonoBehaviour
 
     private Camera mainCamera;
 
-    private List<Unit> selectedUnits = new List<Unit>();
+    public List<Unit> selectedUnits { get; } = new List<Unit>();
 
     private void Start()
     {
